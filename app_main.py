@@ -13,6 +13,7 @@ def contact_us():
         email = request.form.get("email")
         question = request.form.get("question")
         items.append({"name": name, "email": email, "question": question})
+        print(items)
     return render_template("contact_us.html")
 if "__main__" == __name__:
     app.run(debug=True)
