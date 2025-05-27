@@ -20,5 +20,12 @@ conn.execute('''
                 information TEXT NOT NULL
             )
 ''')
+conn.execute('''
+            CREATE TABLE IF NOT EXISTS admins (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+''')
 conn.commit()
 conn.close()
