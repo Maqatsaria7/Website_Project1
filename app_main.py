@@ -128,8 +128,6 @@ def show_post(post_id):
     else:
         viewpost = None
 
-    print("🔎 viewpost:", viewpost)
-
     return render_template("view_post.html", viewpost=viewpost)
 
 
