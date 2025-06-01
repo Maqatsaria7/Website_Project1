@@ -51,11 +51,15 @@
             <textarea class="form-control" id="exampleFormControlTextarea2" name="update_author" rows="3"
                       placeholder="ახალი ავტორი" required>{{post['author']}}</textarea>
         </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">კატეგორია</label>
-            <textarea class="form-control" id="exampleFormControlTextarea3" name="update_category" rows="3"
-                      placeholder="ახალი ავტორი" required>{{post['category']}}</textarea>
-        </div>
+        <div class="mb-3" style="margin-top: 0.5rem; color: white; font-size: 1.25rem">
+        <label for="dropdown" class="form-label">აირჩიეთ კატეგორია:</label>
+        <select class="form-select" id="dropdown" name="update_category" required>
+            <option value="" disabled selected>არჩევა</option>
+            <option value="TRAINING">ვარჯიში</option>
+            <option value="NUTRITION">ნუტრიციოლოგია</option>
+            <option value="SUPPLEMENTS">დანამატები</option>
+        </select>
+    </div>
         <button type="submit" class="btn btn-danger">რედაქტირება</button>
     </form>
 </div>

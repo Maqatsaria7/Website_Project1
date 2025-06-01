@@ -1,3 +1,5 @@
+from typing import Any
+
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
@@ -44,7 +46,7 @@ def workouts():
     with sqlite3.connect('fitnessproject.db') as conn:
         c = conn.cursor()
         c.execute('''
-            SELECT * FROM posts WHERE category = ?
+            SELECT * FROM posts WHERE category = ? ORDER BY id DESC
         ''', ("TRAINING",))
         w_posts = c.fetchall()
         for row in w_posts:
@@ -59,7 +61,7 @@ def nutrition():
     with sqlite3.connect('fitnessproject.db') as conn:
         c = conn.cursor()
         c.execute('''
-            SELECT * FROM posts WHERE category = ?
+            SELECT * FROM posts WHERE category = ? ORDER BY id DESC
         ''', ("NUTRITION",))
         n_posts = c.fetchall()
         for row in n_posts:
@@ -73,7 +75,7 @@ def supplement():
     with sqlite3.connect('fitnessproject.db') as conn:
         c = conn.cursor()
         c.execute('''
-            SELECT * FROM posts WHERE category = ?
+            SELECT * FROM posts WHERE category = ? ORDER BY id DESC
         ''', ("SUPPLEMENTS",))
         s_posts = c.fetchall()
         for row in s_posts:
@@ -83,10 +85,6 @@ def supplement():
 @app.route('/admin')
 def admin():
     return render_template('admin.html')
-
-@app.route('/posts/<int:id>')
-def view_posts(id):
-    return render_template("view_posts.html")
 
 @app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
@@ -106,6 +104,34 @@ def sign_in():
         conn.close()
 
     return render_template('sign_in.html')
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    print("ROUTE HIT")
+    import sqlite3
+    conn = sqlite3.connect('fitnessproject.db')
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM posts WHERE id = ?", (post_id,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        viewpost = {
+            'id': row[0],
+            'title': row[1],
+            'author': row[2],
+            'description': row[3],
+            'information': row[4],
+            'category': row[5]
+        }
+    else:
+        viewpost = None
+
+    print("🔎 viewpost:", viewpost)
+
+    return render_template("view_post.html", viewpost=viewpost)
+
 
 
 
@@ -187,7 +213,8 @@ def admin_delete(id):
     ''', (id,))
     conn.commit()
     conn.close()
-
     return redirect(url_for('admin_posts'))
+
 if __name__ == "__main__":
     app.run(debug=True)
+

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.web-fonts.ge/fonts/alk-sanet/css/alk-sanet.min.css">
+    <title>{{ viewpost['title'] }}</title>
+
+    <style>
+        body {
+            font-family: "ALK Sanet", sans-serif;
+        }
+
+        .main-box {
+            width: 86%;
+            margin-left: 7%;
+            margin-top: 2%;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body style="background-color: #121212;">
+{% include "navbar.html" %}
+{% if viewpost %}
+<div class='main-box'>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="background-color: #696969;">
+            <li class="breadcrumb-item"><a href="/">მთავარი</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color: white;">{{ viewpost['title'] }}</li>
+        </ol>
+    </nav>
+
+    <div class="card" style="background-color: #444444; border: none;">
+        <div class="card-body" style="color: white;">
+            <h1 class="card-title">{{ viewpost['title'] }}</h1>
+            <h5 style="color: white;">ავტორი: {{ viewpost['author'] }}</h5>
+            <p><em>პოსტის მოკლე აღწერა: {{ viewpost['description'] }}</em></p>
+            <hr style="border-color: white;">
+            <p class="card-text">{{ viewpost['information'] }}</p>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<h1 style="color: red;">Post not found</h1>
+{% endif %}
+</body>
+</html>
