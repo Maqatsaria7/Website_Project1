@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.web-fonts.ge/fonts/alk-sanet/css/alk-sanet.min.css">
+    <title>About Us</title>
+
+    <style>
+        body {
+            font-family: "ALK Sanet", sans-serif;
+        }
+
+        .main-box {
+            width: 86%;
+            margin-left: 7%;
+            margin-top: 2%;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body style="background-color: #121212;">
+{% include "navbar.html" %}
+<div class="main-box" style="background-color: #2b2b2b; padding: 20px; border-radius: 10px;">
+    <h2 class="my-4" style="color: #f0f0f0;">ჩვენს შესახებ</h2>
+    <div class="accordion" id="faqAccordion" style="background-color: #2b2b2b;">
+        <div class="card" style="background-color: #3a3a3a; border: none;">
+            <div class="card-header" id="headingOne" style="background-color: #3a3a3a;">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne" style="color: #ffffff;">
+                        ჩვენი მიზანი რა არის?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#faqAccordion">
+                <div class="card-body" style="background-color: #2b2b2b; color: #dcdcdc;">
+                    ჩვენი მიზანი არის შევქმნათ პლატფორმა, სადაც მომხმარებლები შეძლებენ წაიკითხონ ინფორმაცია ჯანსაღ ცხოვრებაზე, და თავიანთი ცოდნა გაუზიარონ სხვებს.
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="background-color: #3a3a3a; border: none;">
+            <div class="card-header" id="headingTwo" style="background-color: #3a3a3a;">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                            style="color: #ffffff;">
+                        რატომ ავირჩიეთ ეს მიმართულება?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqAccordion">
+                <div class="card-body" style="background-color: #2b2b2b; color: #dcdcdc;">
+                    ჩვენ გვჯერა, რომ ჯანსაღ ცხოვრებაზე ინფორმაციის გაზიარება მნიშვნელოვანია.
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="background-color: #3a3a3a; border: none;">
+            <div class="card-header" id="headingThree" style="background-color: #3a3a3a;">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+                            style="color: #ffffff;">
+                        როგორ შეგიძლიათ დაგვიკავშირდეთ?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqAccordion">
+                <div class="card-body" style="background-color: #2b2b2b; color: #dcdcdc;">
+                    შეგიძლიათ დაგვიკავშირდეთ "contact us" გვერდის მეშვეობით.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
