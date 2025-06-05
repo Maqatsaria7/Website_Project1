@@ -1,9 +1,10 @@
-from typing import Any
-
-from flask import Flask, render_template, request, redirect, url_for
+from datetime import timedelta
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'
+app.permanent_session_lifetime = timedelta(seconds=10)
 
 @app.route("/")
 def main_page():
@@ -38,6 +39,7 @@ def make_a_post():
                 INSERT INTO posts (title, author, description, information, category) 
                 VALUES (?, ?, ?, ?, ?)
             ''', (title, author, description, information, category))
+        return redirect(url_for('main_page'))
     return render_template("make_a_post.html")
 
 @app.route("/workouts", methods=["GET"])
@@ -82,9 +84,7 @@ def supplement():
             supplement_posts.append({'id': row[0], 'title': row[1], 'author': row[2], 'description': row[3], 'information': row[4]})
     return render_template("supplement.html", supplement_posts=supplement_posts)
 
-@app.route('/admin')
-def admin():
-    return render_template('admin.html')
+
 
 @app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
@@ -98,12 +98,24 @@ def sign_in():
         print(rows)
         if rows:
             database_password = rows[0][1]
-
             if database_password == user_password:
+                session.permanent = True
+                session['user'] = user_email
                 return redirect(url_for('admin'))
         conn.close()
 
     return render_template('sign_in.html')
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('sign_in'))
+
+@app.route('/admin')
+def admin():
+    if 'user' in session:
+        return render_template("admin.html", user=session['user'])
+    else:
+        return redirect(url_for('sign_in'))
 
 @app.route('/posts/<int:post_id>')
 def show_post(post_id):
