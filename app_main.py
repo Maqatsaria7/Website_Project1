@@ -4,7 +4,7 @@ import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
-app.permanent_session_lifetime = timedelta(seconds=10)
+app.permanent_session_lifetime = timedelta(minutes=10)
 
 @app.route("/")
 def main_page():
@@ -33,12 +33,13 @@ def make_a_post():
         author = request.form.get("author")
         description = request.form.get("description")
         information = request.form.get("information")
+        image = request.form.get("image")
         category = request.form.get("category")
         with sqlite3.connect('fitnessproject.db') as conn:
             conn.execute('''
-                INSERT INTO posts (title, author, description, information, category) 
-                VALUES (?, ?, ?, ?, ?)
-            ''', (title, author, description, information, category))
+                INSERT INTO posts (title, author, description, information, image, category) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (title, author, description, information, image, category))
         return redirect(url_for('main_page'))
     return render_template("make_a_post.html")
 
@@ -52,8 +53,15 @@ def workouts():
         ''', ("TRAINING",))
         w_posts = c.fetchall()
         for row in w_posts:
-            workout_posts.append({'id': row[0], 'title': row[1], 'author': row[2], 'description': row[3], 'information': row[4]})
-            print(workout_posts)
+            workout_posts.append({
+                'id': row[0],
+                'title': row[1],
+                'author': row[2],
+                'description': row[3],
+                'information': row[4],
+                'image': row[6],
+                'is_admin': row[7] if len(row) > 7 else False
+            })
     return render_template("workouts.html", workout_posts=workout_posts)
 
 
@@ -67,8 +75,17 @@ def nutrition():
         ''', ("NUTRITION",))
         n_posts = c.fetchall()
         for row in n_posts:
-            nutrition_posts.append({'id': row[0], 'title': row[1], 'author': row[2], 'description': row[3], 'information': row[4]})
+            nutrition_posts.append({
+                'id': row[0],
+                'title': row[1],
+                'author': row[2],
+                'description': row[3],
+                'information': row[4],
+                'image': row[6],
+                'is_admin': row[7] if len(row) > 7 else False
+            })
     return render_template("nutrition.html", nutrition_posts=nutrition_posts)
+
 
 
 @app.route("/supplement", methods=["GET"])
@@ -81,8 +98,17 @@ def supplement():
         ''', ("SUPPLEMENTS",))
         s_posts = c.fetchall()
         for row in s_posts:
-            supplement_posts.append({'id': row[0], 'title': row[1], 'author': row[2], 'description': row[3], 'information': row[4]})
+            supplement_posts.append({
+                'id': row[0],
+                'title': row[1],
+                'author': row[2],
+                'description': row[3],
+                'information': row[4],
+                'image': row[6],
+                'is_admin': row[7] if len(row) > 7 else False
+            })
     return render_template("supplement.html", supplement_posts=supplement_posts)
+
 
 
 
@@ -135,11 +161,12 @@ def show_post(post_id):
             'author': row[2],
             'description': row[3],
             'information': row[4],
-            'category': row[5]
+            'image': row[6],
+            'category': row[6]
         }
     else:
         viewpost = None
-
+    print(viewpost['image'])
     return render_template("view_post.html", viewpost=viewpost)
 
 
@@ -153,12 +180,14 @@ def admin_posts():
         description = request.form.get('description')
         information = request.form.get('information')
         author = request.form.get('author')
+        image = request.form.get('image')
         category = request.form.get("category")
+        is_admin = True
 
         conn.execute('''
-                     INSERT INTO posts (title, description, information, author, category)
-                     VALUES (?, ?, ?, ?, ?)
-                     ''', (title, description, information, author, category))
+            INSERT INTO posts (title, description, information, author, image, category, is_admin)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (title, description, information, author, image, category, is_admin))
         conn.commit()
 
     posts = []
@@ -167,10 +196,18 @@ def admin_posts():
     rows = c.fetchall()
     conn.close()
     for row in rows:
-        posts.append({'id': row[0], 'title': row[1], 'author': row[2], 'description': row[3], 'information': row[4], 'category': row[5]})
+        posts.append({
+            'id': row[0],
+            'title': row[1],
+            'author': row[2],
+            'description': row[3],
+            'information': row[4],
+            'category': row[5],
+            'image': row[6],
+            'is_admin': row[7] if len(row) > 7 else False
+        })
 
     return render_template('admin_posts.html', posts=posts)
-
 
 @app.route('/admin/admin_contacts')
 def admin_contacts():
@@ -205,11 +242,12 @@ def admin_update(id):
         author = request.form.get("update_author")
         description = request.form.get("update_description")
         information = request.form.get("update_information")
+        image = request.form.get("update_image")
         category = request.form.get("update_category")
 
         conn.execute('''
-            UPDATE posts SET title = ?, description = ?, information = ?, author = ?, category = ? WHERE id = ?
-        ''', (title, description, information, author, category, id))
+            UPDATE posts SET title = ?, description = ?, information = ?, author = ?, image = ?, category = ? WHERE id = ?
+        ''', (title, description, information, author, image, category, id))
         conn.commit()
         conn.close()
 
@@ -225,5 +263,66 @@ def admin_delete(id):
     conn.close()
     return redirect(url_for('admin_posts'))
 
+@app.route('/admin/users', methods=["GET", "POST"])
+def admin_users():
+    admins = []
+    conn = sqlite3.connect('fitnessproject.db')
+    if request.method == 'POST':
+        admin_email = request.form.get('admin_email')
+        admin_password = request.form.get('admin_password')
+        conn.execute('''
+                         INSERT INTO admins (email, password)
+                         VALUES (?, ?)
+                         ''', (admin_email,admin_password))
+        conn.commit()
+    c = conn.cursor()
+    c.execute('SELECT * FROM admins')
+    rows = c.fetchall()
+    conn.close()
+
+    for row in rows:
+        admins.append({'id': row[0], 'email': row[1], 'password': row[2]})
+
+    return render_template('admin_users.html', admins=admins)
+
+@app.route("/admin/users/update/<int:id>", methods=["GET", "POST"])
+def admin_update_users(id):
+    conn = sqlite3.connect("fitnessproject.db")
+
+    if request.method == "GET":
+        c = conn.cursor()
+        c.execute('SELECT * FROM admins WHERE id = ?', (id,))
+        row = c.fetchone()
+        conn.close()
+
+        if row is None:
+            return "Admin not found", 404
+
+        update_admin = {'id': row[0], 'email': row[1], 'password': row[2]}
+        return render_template("admin_update_users.html", update_admin=update_admin)
+
+    else:
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        conn.execute(
+            'UPDATE admins SET email = ?, password = ? WHERE id = ?',
+            (email, password, id)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("admin_users"))
+
+
+@app.route('/admin/users/delete/<int:id>')
+def admin_users_delete(id):
+    conn = sqlite3.connect('fitnessproject.db')
+    conn.execute('''
+        DELETE FROM admins WHERE id = ?
+    ''', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('admin_users'))
 if __name__ == "__main__":
     app.run(debug=True)

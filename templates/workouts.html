@@ -22,19 +22,25 @@
     <div class="row">
         {% for row in workout_posts %}
         <div class="col-md-4 d-flex align-items-stretch mb-4">
-            <div class="card w-100" style="background-color: #202020; height: 100%;">
-                <div class="card-body">
-                    <h5 class="card-title text-white">{{ row['title'] }}</h5>
-                    <p class="card-text text-white">{{ row['description'] }}</p>
-                    <p class="card-text text-white">ავტორი: {{ row['author'] }}</p>
-                    <a href="/posts/{{row['id']}}" class="btn btn-primary">წაკითხვა</a>
-                </div>
-            </div>
+    <div class="card w-100" style="background-color: #202020; height: 100%;">
+
+        <img src="{{row['image']}}" class="card-img-top" alt="Image for {{ row['title'] }}">
+        <div class="card-body">
+            <h5 class="card-title text-white">{{ row['title'] }}</h5>
+            <p class="card-text text-white">{{ row['description'] }}</p>
+            <p class="card-text text-white">
+    ავტორი: {{ row['author'] }}
+    {% if row['is_admin'] %}
+        <span class="badge badge-danger ml-2">ადმინისგან შექმნილი</span>
+    {% endif %}
+</p>
+            <a href="/posts/{{row['id']}}" class="btn btn-danger">წაკითხვა</a>
         </div>
+    </div>
+</div>
         {% endfor %}
     </div>
 </div>
-
 {% include "footer.html" %}
 </body>
 </html>

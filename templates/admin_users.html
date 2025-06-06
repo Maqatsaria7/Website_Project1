@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="//cdn.web-fonts.ge/fonts/alk-sanet/css/alk-sanet.min.css">
-    <title>Admin Page</title>
+    <title>Admin Users</title>
 
     <style>
         body {
@@ -31,81 +31,49 @@
 {% include 'admin_header.html' %}
 
 <div class="main-box">
-    <h3>დაამატეთ პოსტი</h3>
+    <h3>დაამატეთ ადმინები</h3>
     <br>
-    <form action={{url_for('admin_posts')}} method="POST">
+    <form action={{url_for('admin_users')}} method="POST">
         <div class="form-group">
-            <label for="exampleFormControlInput1">სათაური</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="title"
-                   placeholder="ჩაწერეთ პოსტის სათაური" required>
+            <label for="exampleFormControlInput1">სახელი</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" name="admin_email"
+                   placeholder="ჩაწერეთ ადმინის სახელი" required>
         </div>
         <div class="form-group">
-            <label for="exampleFormControlInput2">მოკლე აღწერა</label>
-            <input type="text" class="form-control" id="exampleFormControlInput2" name="description"
-                   placeholder="ჩაწერეთ მოკლე აღწერა" required>
+            <label for="exampleFormControlInput2">პაროლი</label>
+            <input type="text" class="form-control" id="exampleFormControlInput2" name="admin_password"
+                   placeholder="ჩაწერეთ პაროლი" required>
         </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">შინაარსი</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" name="information" rows="3"
-                      placeholder="ჩაწერეთ პოსტის აღწერა" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">ავტორი</label>
-            <textarea class="form-control" id="exampleFormControlTextarea2" name="author" rows="3"
-                      placeholder="დაწერეთ ავტორი" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">ფოტო</label>
-            <textarea class="form-control" id="exampleFormControlInput3" name="image" rows="3"
-                      placeholder="შეიყვანეთ პოსტის ფოტოს მისამართი" required></textarea>
-        </div>
-        <div class="mb-3" style="margin-top: 0.5rem; color: white; font-size: 1.25rem">
-        <label for="dropdown" class="form-label">აირჩიეთ კატეგორია:</label>
-        <select class="form-select" id="dropdown" name="category" required>
-            <option value="" disabled selected>არჩევა</option>
-            <option value="TRAINING">ვარჯიში</option>
-            <option value="NUTRITION">ნუტრიციოლოგია</option>
-            <option value="SUPPLEMENTS">დანამატები</option>
-        </select>
-    </div>
-        <button type="submit" class="btn btn-danger">პოსტის დამატება</button>
+        <button type="submit" class="btn btn-danger">ადმინის დამატება</button>
     </form>
 </div>
 
 <br>
 <div class="main-box">
-    <h3>არსებული პოსტები</h3>
+    <h3>ადმინები:</h3>
 </div>
 
 <table class="table main-box">
     <thead>
     <tr class="white-text">
         <th scope="col" >ID</th>
-        <th scope="col">სათაური</th>
-        <th scope="col">აღწერა</th>
-        <th scope="col">შინაარსი</th>
-        <th scope="col">ავტორი</th>
-        <th scope="col">ფოტო</th>
-        <th scope="col">კატეგორია</th>
+        <th scope="col">ელ.ფოსტა</th>
+        <th scope="col">პაროლი</th>
     </tr>
     </thead>
     <tbody>
-    {%for post in posts%}
+    {%for admin in admins%}
     <tr>
-        <th scope="row" class="white-text">{{post['id']}}</th>
-        <td>{{post['title']}}</td>
-        <td>{{post['description']}}</td>
-        <td>{{post['information']}}</td>
-        <td>{{post['author']}}</td>
-        <td><img src="{{ post['image'] }}" alt="Image" style="max-width: 100px; height: auto;"></td>
-        <td>{{post['category']}}</td>
+        <th scope="row" class="white-text">{{admin['id']}}</th>
+        <td>{{admin['email']}}</td>
+        <td>{{admin['password']}}</td>
         <td>
-            <a href="{{ url_for('admin_delete', id=post['id']) }}">
+            <a href="{{ url_for('admin_users_delete', id=admin['id']) }}">
                 <img width="20px" src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="delete">
             </a>
         </td>
         <td>
-            <a href="{{ url_for('admin_update', id=post['id']) }}">
+            <a href="{{ url_for('admin_update_users', id=admin['id']) }}">
                 <img width="20px" src="data:image/png;base64,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" alt="delete">
             </a>
         </td>

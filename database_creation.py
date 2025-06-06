@@ -27,5 +27,9 @@ conn.execute('''
                 password TEXT NOT NULL
             )
 ''')
+
+conn.execute('''
+        ALTER TABLE posts ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+''')
 conn.commit()
 conn.close()

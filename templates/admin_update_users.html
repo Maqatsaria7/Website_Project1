@@ -8,42 +8,40 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="//cdn.web-fonts.ge/fonts/alk-sanet/css/alk-sanet.min.css">
+    <title>Admin Update</title>
 
-     <style>
+    <style>
         body {
-            background-color: #121212;
             font-family: "ALK Sanet", sans-serif;
+            color: white;
         }
 
         .main-box {
-            background-color: #242424;
             width: 86%;
             margin-left: 7%;
             margin-top: 2%;
         }
-        .sign-in-form{
-            background-color: #242424;
-            width: 40%;
-            margin-left: 30%;
-            margin-top: 10%;
-            padding: 50px;
-            color: white;
-        }
     </style>
 </head>
-<body>
-<div class="sign-in-form border shadow">
-    <form method="POST" action="/sign_in">
+<body style="background-color: #121212">
+{% include 'admin_header.html' %}
+
+<div class="main-box">
+    <h3>ადმინის ცვლილება</h3>
+    <br>
+    <form action="{{ url_for('admin_update_users', id=update_admin['id']) }}" method="POST">
         <div class="form-group">
-            <label for="exampleInputEmail1">ელ. ფოსტის მისამართი</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                   placeholder="Enter email" name="email">
+            <label for="email">ელფოსტა</label>
+            <input type="text" class="form-control" id="email" name="email"
+                   placeholder="ჩაწერეთ ელფოსტა" value="{{ update_admin['email'] }}" required>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">პაროლი</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+            <label for="password">პაროლი</label>
+            <input type="text" class="form-control" id="password" name="password"
+                   placeholder="ჩაწერეთ პაროლი" value="{{ update_admin['password'] }}" required>
         </div>
-        <button type="submit" class="btn btn-primary">შესვლა</button>
+
+        <button type="submit" class="btn btn-danger">რედაქტირება</button>
     </form>
 </div>
 
